@@ -9,6 +9,7 @@ import (
 	"log"
 	mo "mc/monitor"
 	"net/http"
+	"os"
 	"strings"
 	"syscall"
 	"time"
@@ -17,14 +18,26 @@ var Interval int
 var URL string
 
 const CT string = "application/json"
+var logger *log.Logger
+func init()  {
+	file, err := os.OpenFile("mc.log",os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalln("fail to create mc.log file!")
+	}
+	logger = log.New(file, "", log.Llongfile)
+	logger.SetFlags(log.LstdFlags)
+}
 func main()  {
 	flag.IntVar(&Interval, "i", 5, "数据采集间隔(单位s)")
 	flag.StringVar(&URL, "server", "", "上报服务器地址")
 	flag.Parse()
 	if len(URL)==0{
-		log.Fatalln("server参数为空")
+		logger.Fatalln("server参数为空")
 		syscall.Exit(-1)
 	}
+	logger.Println("**********服务已启动**********")
+	logger.Println("数据中心地址",URL)
+	logger.Println("数据采集间隔时间",Interval,"秒")
 	ticker := time.NewTicker(time.Second * time.Duration(Interval))
 	for _ = range ticker.C {
 		start()
@@ -32,7 +45,7 @@ func main()  {
 }
 
 func start()  {
-	log.Println("采集数据")
+	logger.Println("采集数据")
 	monitor := map[string]interface{}{}
 	//monitor["disk"] = diskMonitor()
 
@@ -42,12 +55,12 @@ func start()  {
 	monitor["cpu"] = mo.CpuInfo()
 	monitor["disk"] = mo.DiskMonitor()
 
-	log.Println("上报数据")
+	logger.Println("上报数据")
 	_,err := post(URL,monitor,CT)
 	if err != nil{
-		log.Println("上报数据失败",err.Error())
+		logger.Println("上报数据失败",err.Error())
 	}else{
-		log.Println("上报数据成功")
+		logger.Println("上报数据成功")
 	}
 }
 
