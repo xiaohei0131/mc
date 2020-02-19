@@ -3,8 +3,8 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"flag"
-	"fmt"
 	"io/ioutil"
 	"log"
 	mo "mc/monitor"
@@ -22,7 +22,7 @@ func main()  {
 	flag.StringVar(&URL, "server", "", "上报服务器地址")
 	flag.Parse()
 	if len(URL)==0{
-		fmt.Errorf("server参数为空")
+		log.Fatalln("server参数为空")
 		syscall.Exit(-1)
 	}
 	ticker := time.NewTicker(time.Second * time.Duration(Interval))
@@ -43,11 +43,11 @@ func start()  {
 	monitor["disk"] = mo.DiskMonitor()
 
 	log.Println("上报数据")
-	re,err := post(URL,monitor,CT)
+	_,err := post(URL,monitor,CT)
 	if err != nil{
-		log.Println("上报数据失败",re)
+		log.Println("上报数据失败",err.Error())
 	}else{
-		log.Println("上报数据成功",re)
+		log.Println("上报数据成功")
 	}
 }
 
@@ -67,10 +67,14 @@ func post(url string, data interface{}, contentType string) (string,error) {
 	defer resp.Body.Close()
 
 	result, err := ioutil.ReadAll(resp.Body)
-	if err != nil || strings.Contains(string(result),"404"){
-		return string(result),err
+	if err != nil{
+		return "",err
 	}
-	return string(result),nil
+	re := string(result)
+	if strings.Contains(re,"404"){
+		return re,errors.New(re)
+	}
+	return re,nil
 }
 
 
