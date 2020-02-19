@@ -29,7 +29,7 @@ func init()  {
 }
 func main()  {
 	flag.IntVar(&Interval, "i", 5, "数据采集间隔(单位s)")
-	flag.StringVar(&URL, "server", "", "上报服务器地址")
+	flag.StringVar(&URL, "server", "", "数据中心地址")
 	flag.Parse()
 	if len(URL)==0{
 		logger.Fatalln("server参数为空")
