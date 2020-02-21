@@ -54,6 +54,7 @@ func start()  {
 	monitor["memory"] = mo.MemInfo()
 	monitor["cpu"] = mo.CpuInfo()
 	monitor["disk"] = mo.DiskMonitor()
+	monitor["gpu"] = mo.GetGpuInfo()
 
 	logger.Println("上报数据")
 	_,err := post(URL,monitor,CT)
@@ -73,6 +74,7 @@ func post(url string, data interface{}, contentType string) (string,error) {
 	// 超时时间：5秒
 	client := &http.Client{Timeout: 5 * time.Second}
 	jsonStr, _ := json.Marshal(data)
+	logger.Println(string(jsonStr))
 	resp, err := client.Post(url, contentType, bytes.NewBuffer(jsonStr))
 	if err != nil {
 		return "",err
