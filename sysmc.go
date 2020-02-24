@@ -74,6 +74,7 @@ func post(url string, data interface{}, contentType string) (string,error) {
 	// 超时时间：5秒
 	client := &http.Client{Timeout: 5 * time.Second}
 	jsonStr, _ := json.Marshal(data)
+	//todo 此处打印只作调试，正式环境打包前请删除以下日志输出语句
 	logger.Println(string(jsonStr))
 	resp, err := client.Post(url, contentType, bytes.NewBuffer(jsonStr))
 	if err != nil {

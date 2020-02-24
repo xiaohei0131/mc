@@ -1,7 +1,6 @@
 package monitor
 
 import (
-	//"github.com/shirou/gopsutil/disk"
 	"strings"
 )
 
@@ -24,26 +23,25 @@ import (
 	}
 }*/
 
-
 /**
 监控磁盘
 */
-func DiskMonitor()  interface{}{
+func DiskMonitor() interface{} {
 	//cmdRe := runCmd("df -hT")
 	cmdRe := runCmd("df -mT")
 	mapInstances := []map[string]interface{}{}
-	for k,v:= range cmdRe{
-		if k==0 || v == ""{
+	for k, v := range cmdRe {
+		if k == 0 || v == "" {
 			continue
-		}else {
+		} else {
 			arr := strings.Fields(v)
 			instance := map[string]interface{}{}
 			instance["device"] = arr[0]
 			instance["fstype"] = arr[1]
-			instance["total"] = arr[2]
-			instance["used"] = arr[3]
-			instance["available"] = arr[4]
-			instance["usedPercent"] = arr[5]
+			instance["total"] = convertToUnit(arr[2])
+			instance["used"] = convertToUnit(arr[3])
+			instance["available"] = convertToUnit(arr[4])
+			instance["usedPercent"] = parsePercent(arr[5]) / 100
 			instance["mountpoint"] = arr[6]
 			mapInstances = append(mapInstances, instance)
 		}

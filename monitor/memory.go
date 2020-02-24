@@ -1,27 +1,36 @@
 package monitor
 
 import (
-	"fmt"
 	"github.com/shirou/gopsutil/mem"
 	"strings"
 )
 
+type Memory struct {
+	Memtotal        uint64  `json:"memory_total"`
+	Memused         uint64  `json:"memory_used"`
+	MemUsedPercent  float64 `json:"memory_utilization"`
+	MemAvailable    uint64  `json:"memory_available"`
+	MemFree         uint64  `json:"memory_free"`
+	SwapTotal       uint64  `json:"swap_total"`
+	SwapFree        uint64  `json:"swap_free"`
+	SwapUsed        uint64  `json:"swap_used"`
+	SwapUsedPercent float64 `json:"swap_utilization"`
+}
+
 func MemInfo() interface{} {
 	v, _ := mem.VirtualMemory()
-	mem := map[string]interface{}{}
-	/*mem["total"] = fmt.Sprint(v.Total/(1024*1024),"M")
-	mem["used"] = fmt.Sprint(v.Used/(1024*1024),"M")
-	mp := fmt.Sprintf("%.2f",v.UsedPercent)
-	mem["usedPercent"] = fmt.Sprint(mp,"%")
-	mem["available"] = fmt.Sprint(v.Available/(1024*1024),"M")
-	mem["free"] = fmt.Sprint(v.Free/(1024*1024),"M")*/
-	mem["total"] = v.Total / (1024 * 1024)
-	mem["used"] = v.Used / (1024 * 1024)
-	mp := fmt.Sprintf("%.2f", v.UsedPercent)
-	mem["usedPercent"] = fmt.Sprint(mp, "%")
-	mem["available"] = v.Available / (1024 * 1024)
-	mem["free"] = v.Free / (1024 * 1024)
-	return mem
+	memory := Memory{}
+	memory.Memtotal = v.Total / (1024 * 1024)
+	memory.Memused = v.Used / (1024 * 1024)
+	memory.MemUsedPercent = v.UsedPercent
+	memory.MemAvailable = v.Available / (1024 * 1024)
+	memory.MemFree = v.Free / (1024 * 1024)
+	sw, _ := mem.SwapMemory()
+	memory.SwapFree = sw.Free / (1024 * 1024)
+	memory.SwapTotal = sw.Total / (1024 * 1024)
+	memory.SwapUsed = sw.Used / (1024 * 1024)
+	memory.SwapUsedPercent = sw.UsedPercent
+	return memory
 }
 
 /**

@@ -22,8 +22,7 @@ func CpuInfo() interface{} {
 		mapInstances["iowait"]=res[0].Iowait
 		mapInstances["irq"]=res[0].Irq
 		mapInstances["softirq"]=res[0].Softirq
-		cp := fmt.Sprintf("%.2f",percent[0])
-		mapInstances["percent"]= fmt.Sprint(cp,"%")
+		mapInstances["percent"]= percent[0]/100
 		mapInstances["load"]= getCpuLoad()
 	}
 	return mapInstances
