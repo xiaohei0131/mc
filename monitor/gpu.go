@@ -22,7 +22,7 @@ type GPUInfo struct {
 type Process struct {
 	PID           string `json:"index"`
 	Name          string `json:"name"`
-	UsedGpuMemory string `json:"used_gpu_memory"`
+	UsedGpuMemory int `json:"used_gpu_memory"`
 }
 
 func GetGpuInfo() []GPUInfo {
@@ -70,7 +70,7 @@ func getProcessInGpu(gid string) []Process {
 		p := Process{}
 		p.PID = arr[0]
 		p.Name = strings.Replace(arr[1], " ", "", -1)
-		p.UsedGpuMemory = strings.Replace(arr[2], " ", "", -1)
+		p.UsedGpuMemory = getMibValue(arr[2])
 		processes = append(processes, p)
 	}
 	return processes
