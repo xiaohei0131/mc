@@ -32,7 +32,7 @@ func main()  {
 	flag.StringVar(&URL, "server", "", "数据中心地址")
 	flag.Parse()
 	if len(URL)==0{
-		logger.Fatalln("server参数为空")
+		logger.Panicln("server参数为空")
 		syscall.Exit(-1)
 	}
 	logger.Println("**********服务已启动**********")
@@ -47,8 +47,8 @@ func main()  {
 func start()  {
 	logger.Println("采集数据")
 	monitor := map[string]interface{}{}
-	//monitor["disk"] = diskMonitor()
 
+	monitor["tips"] = "Memory or storage in megabytes (Mib)"
 	monitor["system"] = mo.GetSysInfo()
 	monitor["ip"] = mo.GetLocalIP()
 	monitor["memory"] = mo.MemInfo()

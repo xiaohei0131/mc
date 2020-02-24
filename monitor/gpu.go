@@ -2,6 +2,7 @@ package monitor
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -9,9 +10,9 @@ type GPUInfo struct {
 	Index          string    `json:"index"`
 	Name           string    `json:"name"`
 	DriverVersion  string    `json:"driver_version"`
-	MemoryTotal    string    `json:"memory_total"`
-	MemoryUsed     string    `json:"memory_used"`
-	MemoryFree     string    `json:"memory_free"`
+	MemoryTotal    int    `json:"memory_total"`
+	MemoryUsed     int    `json:"memory_used"`
+	MemoryFree     int    `json:"memory_free"`
 	MemoryUtil     string    `json:"memory_utilization"`
 	GpuUtil        string    `json:"gpu_utilization"`
 	GpuTemperature string    `json:"gpu_temperature"`
@@ -37,14 +38,14 @@ func GetGpuInfo() []GPUInfo {
 		}
 		gpu := GPUInfo{}
 		gpu.Index = arr[0]
-		gpu.Name = arr[1]
-		gpu.DriverVersion = arr[2]
-		gpu.MemoryTotal = arr[3]
-		gpu.MemoryUsed = arr[4]
-		gpu.MemoryFree = arr[5]
-		gpu.GpuUtil = arr[6]
-		gpu.MemoryUtil = arr[7]
-		gpu.GpuTemperature = fmt.Sprint(arr[8], "℃")
+		gpu.Name = strings.Replace(arr[1], " ", "", -1)
+		gpu.DriverVersion = strings.Replace(arr[2], " ", "", -1)
+		gpu.MemoryTotal = getMibValue(arr[3])
+		gpu.MemoryUsed = getMibValue(arr[4])
+		gpu.MemoryFree = getMibValue(arr[5])
+		gpu.GpuUtil = strings.Replace(arr[6], " ", "", -1)
+		gpu.MemoryUtil = strings.Replace(arr[7], " ", "", -1)
+		gpu.GpuTemperature = fmt.Sprint(strings.Replace(arr[8], " ", "", -1), "℃")
 		gpu.Processes = getProcessInGpu(gpu.Index)
 		gpus = append(gpus, gpu)
 	}
@@ -68,9 +69,18 @@ func getProcessInGpu(gid string) []Process {
 		}
 		p := Process{}
 		p.PID = arr[0]
-		p.Name = arr[1]
-		p.UsedGpuMemory = arr[2]
+		p.Name = strings.Replace(arr[1], " ", "", -1)
+		p.UsedGpuMemory = strings.Replace(arr[2], " ", "", -1)
 		processes = append(processes, p)
 	}
 	return processes
+}
+
+func getMibValue(ov string) int  {
+	arr := strings.Split(strings.TrimSpace(ov)," ")
+	if len(arr) != 2{
+		i, _ := strconv.Atoi(arr[0])
+		return i
+	}
+	return 0
 }

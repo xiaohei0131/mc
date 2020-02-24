@@ -29,7 +29,8 @@ import (
 监控磁盘
 */
 func DiskMonitor()  interface{}{
-	cmdRe := runCmd("df -hT")
+	//cmdRe := runCmd("df -hT")
+	cmdRe := runCmd("df -mT")
 	mapInstances := []map[string]interface{}{}
 	for k,v:= range cmdRe{
 		if k==0 || v == ""{

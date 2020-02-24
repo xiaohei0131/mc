@@ -6,28 +6,34 @@ import (
 	"strings"
 )
 
-func MemInfo()  interface{}{
+func MemInfo() interface{} {
 	v, _ := mem.VirtualMemory()
 	mem := map[string]interface{}{}
-	mem["total"] = fmt.Sprint(v.Total/(1024*1024),"M")
+	/*mem["total"] = fmt.Sprint(v.Total/(1024*1024),"M")
 	mem["used"] = fmt.Sprint(v.Used/(1024*1024),"M")
 	mp := fmt.Sprintf("%.2f",v.UsedPercent)
 	mem["usedPercent"] = fmt.Sprint(mp,"%")
 	mem["available"] = fmt.Sprint(v.Available/(1024*1024),"M")
-	mem["free"] = fmt.Sprint(v.Free/(1024*1024),"M")
+	mem["free"] = fmt.Sprint(v.Free/(1024*1024),"M")*/
+	mem["total"] = v.Total / (1024 * 1024)
+	mem["used"] = v.Used / (1024 * 1024)
+	mp := fmt.Sprintf("%.2f", v.UsedPercent)
+	mem["usedPercent"] = fmt.Sprint(mp, "%")
+	mem["available"] = v.Available / (1024 * 1024)
+	mem["free"] = v.Free / (1024 * 1024)
 	return mem
 }
 
 /**
 监控内存
 */
-func memoryMonitor()  interface{}{
+func memoryMonitor() interface{} {
 	cmdRe := runCmd("free -h")
 	mapInstances := map[string]interface{}{}
-	for k,v:= range cmdRe{
-		if k==0{
+	for k, v := range cmdRe {
+		if k == 0 {
 			continue
-		}else {
+		} else {
 			arr := strings.Fields(v)
 			if k == 1 {
 				mapInstances["memTotal"] = arr[1]
