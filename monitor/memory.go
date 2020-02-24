@@ -15,6 +15,8 @@ type Memory struct {
 	SwapFree        uint64  `json:"swap_free"`
 	SwapUsed        uint64  `json:"swap_used"`
 	SwapUsedPercent float64 `json:"swap_utilization"`
+	SwapIn          uint64  `json:"swap_in"`
+	SwapOut         uint64  `json:"swap_out"`
 }
 
 func MemInfo() interface{} {
@@ -30,6 +32,8 @@ func MemInfo() interface{} {
 	memory.SwapTotal = sw.Total / (1024 * 1024)
 	memory.SwapUsed = sw.Used / (1024 * 1024)
 	memory.SwapUsedPercent = sw.UsedPercent
+	memory.SwapIn = sw.Sin / (1024 * 1024)
+	memory.SwapOut = sw.Sout / (1024 * 1024)
 	return memory
 }
 
