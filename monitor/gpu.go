@@ -78,7 +78,7 @@ func getProcessInGpu(gid string) []Process {
 
 func getMibValue(ov string) int  {
 	arr := strings.Split(strings.TrimSpace(ov)," ")
-	if len(arr) != 2{
+	if len(arr) == 2{
 		i, _ := strconv.Atoi(arr[0])
 		return i
 	}
