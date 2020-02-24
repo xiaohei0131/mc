@@ -27,10 +27,7 @@ type Process struct {
 func GetGpuInfo() []GPUInfo {
 	cmdRe := runCmd("nvidia-smi --query-gpu=index,name,driver_version,memory.total,memory.used,memory.free,utilization.gpu,utilization.memory,temperature.gpu --format=csv,noheader,nounits")
 	gpus := []GPUInfo{}
-	for k, v := range cmdRe {
-		if k == 0 {
-			continue
-		}
+	for _, v := range cmdRe {
 		arr := strings.Split(v, ",")
 		if len(arr) != 9 {
 			continue
@@ -58,10 +55,7 @@ func getProcessInGpu(gid uint64) []Process {
 	cmdStr := fmt.Sprintf("nvidia-smi -i %d --query-compute-apps=pid,name,used_memory --format=csv,noheader,nounits", gid)
 	cmdRe := runCmd(cmdStr)
 	processes := []Process{}
-	for k, v := range cmdRe {
-		if k == 0 {
-			continue
-		}
+	for _, v := range cmdRe {
 		arr := strings.Split(v, ",")
 		if len(arr) != 3 {
 			continue
