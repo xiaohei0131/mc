@@ -24,14 +24,14 @@ func MemInfo() interface{} {
 	memory := Memory{}
 	memory.Memtotal = v.Total / (1024 * 1024)
 	memory.Memused = v.Used / (1024 * 1024)
-	memory.MemUsedPercent = v.UsedPercent
+	memory.MemUsedPercent = v.UsedPercent / 100
 	memory.MemAvailable = v.Available / (1024 * 1024)
 	memory.MemFree = v.Free / (1024 * 1024)
 	sw, _ := mem.SwapMemory()
 	memory.SwapFree = sw.Free / (1024 * 1024)
 	memory.SwapTotal = sw.Total / (1024 * 1024)
 	memory.SwapUsed = sw.Used / (1024 * 1024)
-	memory.SwapUsedPercent = sw.UsedPercent
+	memory.SwapUsedPercent = sw.UsedPercent / 100
 	memory.SwapIn = sw.Sin / (1024 * 1024)
 	memory.SwapOut = sw.Sout / (1024 * 1024)
 	return memory
