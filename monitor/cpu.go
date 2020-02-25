@@ -13,7 +13,6 @@ func CpuInfo(logger *log.Logger) interface{} {
 			logger.Println("CPU采集失败", err)
 		}
 	}()
-	panic("cpu error")
 	mapInstances := map[string]interface{}{}
 	res, err := cpu.Times(false) // false是展示全部总和 true是分别展示
 	if err != nil {
