@@ -12,7 +12,6 @@ import (
 	"os"
 	"strings"
 	"sync"
-	"syscall"
 	"time"
 )
 
@@ -37,7 +36,7 @@ func main() {
 	flag.Parse()
 	if len(URL) == 0 {
 		logger.Panicln("server参数为空")
-		syscall.Exit(-1)
+		//syscall.Exit(-1)
 	}
 	logger.Println("**********服务已启动**********")
 	logger.Println("数据中心地址", URL)
