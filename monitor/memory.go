@@ -2,6 +2,7 @@ package monitor
 
 import (
 	"github.com/shirou/gopsutil/mem"
+	"log"
 	"strings"
 )
 
@@ -19,7 +20,12 @@ type Memory struct {
 	SwapOut         uint64  `json:"swap_out"`
 }
 
-func MemInfo() interface{} {
+func MemInfo(logger *log.Logger) interface{} {
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Println("IP采集失败", err)
+		}
+	}()
 	v, _ := mem.VirtualMemory()
 	memory := Memory{}
 	memory.Memtotal = v.Total / (1024 * 1024)

@@ -3,10 +3,17 @@ import (
 	"fmt"
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/load"
+	"log"
 	"time"
 )
 
-func CpuInfo() interface{} {
+func CpuInfo(logger *log.Logger) interface{} {
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Println("CPU采集失败", err)
+		}
+	}()
+	panic("cpu error")
 	mapInstances := map[string]interface{}{}
 	res, err := cpu.Times(false) // false是展示全部总和 true是分别展示
 	if err != nil {

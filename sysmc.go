@@ -49,7 +49,7 @@ func main() {
 }
 
 func start() {
-	logger.Println("采集数据")
+	//logger.Println("采集数据")
 	monitor := map[string]interface{}{}
 
 	monitor["tips"] = "Memory or storage in megabytes (Mib)"
@@ -57,43 +57,37 @@ func start() {
 
 	wg.Add(6)
 	go func() {
-		monitor["system"] = mo.GetSysInfo()
+		monitor["system"] = mo.GetSysInfo(logger)
 		wg.Done()
 	}()
 	go func() {
-		monitor["ip"] = mo.GetLocalIP()
+		monitor["ip"] = mo.GetLocalIP(logger)
 		wg.Done()
 	}()
 	go func() {
-		monitor["memory"] = mo.MemInfo()
+		monitor["memory"] = mo.MemInfo(logger)
 		wg.Done()
 	}()
 	go func() {
-		monitor["cpu"] = mo.CpuInfo()
+		monitor["cpu"] = mo.CpuInfo(logger)
 		wg.Done()
 	}()
 	go func() {
-		monitor["disk"] = mo.DiskMonitor()
+		monitor["disk"] = mo.DiskMonitor(logger)
 		wg.Done()
 	}()
 	go func() {
-		monitor["gpu"] = mo.GetGpuInfo()
+		monitor["gpu"] = mo.GetGpuInfo(logger)
 		wg.Done()
 	}()
-	/*monitor["system"] = mo.GetSysInfo()
-	monitor["ip"] = mo.GetLocalIP()
-	monitor["memory"] = mo.MemInfo()
-	monitor["cpu"] = mo.CpuInfo()
-	monitor["disk"] = mo.DiskMonitor()
-	monitor["gpu"] = mo.GetGpuInfo()*/
 	wg.Wait()
-	logger.Println("上报数据")
+	//logger.Println("上报数据")
 	_, err := post(URL, monitor, CT)
 	if err != nil {
 		logger.Println("上报数据失败", err.Error())
-	} else {
+	} /*else {
 		logger.Println("上报数据成功")
-	}
+	}*/
 }
 
 // 发送POST请求
@@ -105,7 +99,6 @@ func post(url string, data interface{}, contentType string) (string, error) {
 	// 超时时间：5秒
 	client := &http.Client{Timeout: 5 * time.Second}
 	jsonStr, _ := json.Marshal(data)
-	//todo 此处打印只作调试，正式环境打包前请删除以下日志输出语句
 	//logger.Println(string(jsonStr))
 	resp, err := client.Post(url, contentType, bytes.NewBuffer(jsonStr))
 	if err != nil {

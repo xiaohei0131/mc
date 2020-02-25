@@ -1,7 +1,6 @@
 package monitor
 
 import (
-	"fmt"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -12,8 +11,7 @@ func runCmd(cmdstr string)  []string{
 	out,err := cmd.Output()
 
 	if err != nil{
-		fmt.Println(err)
-		return nil
+		panic(err)
 	}else {
 		result := strings.Split(string(out),"\n")
 		return result

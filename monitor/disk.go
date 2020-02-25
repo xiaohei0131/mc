@@ -1,6 +1,7 @@
 package monitor
 
 import (
+	"log"
 	"strings"
 )
 
@@ -26,7 +27,12 @@ import (
 /**
 监控磁盘
 */
-func DiskMonitor() interface{} {
+func DiskMonitor(logger *log.Logger) interface{} {
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Println("磁盘（disk）采集失败", err)
+		}
+	}()
 	//cmdRe := runCmd("df -hT")
 	cmdRe := runCmd("df -mT")
 	mapInstances := []map[string]interface{}{}

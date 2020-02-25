@@ -1,8 +1,16 @@
 package monitor
 
-import "net"
+import (
+	"log"
+	"net"
+)
 
-func GetLocalIP() string {
+func GetLocalIP(logger *log.Logger) string {
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Println("IP采集失败", err)
+		}
+	}()
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {
 		return "unknown"
