@@ -23,7 +23,7 @@ type Memory struct {
 func MemInfo(logger *log.Logger) interface{} {
 	defer func() {
 		if err := recover(); err != nil {
-			logger.Println("IP采集失败", err)
+			logger.Println("内存采集失败", err)
 		}
 	}()
 	v, _ := mem.VirtualMemory()
