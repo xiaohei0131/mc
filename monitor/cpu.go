@@ -15,13 +15,14 @@ func CpuInfo() interface{} {
 	if len(res) == 1 {
 		// CPU使用率
 		percent, _ := cpu.Percent(time.Second, false)
-		mapInstances["user"]=res[0].User
-		mapInstances["system"]=res[0].System
-		mapInstances["idle"]=res[0].Idle
-		mapInstances["nice"]=res[0].Nice
-		mapInstances["iowait"]=res[0].Iowait
-		mapInstances["irq"]=res[0].Irq
-		mapInstances["softirq"]=res[0].Softirq
+		mapInstances["user"]=res[0].User/res[0].Total()
+		mapInstances["system"]=res[0].System/res[0].Total()
+		mapInstances["idle"]=res[0].Idle/res[0].Total()
+		mapInstances["nice"]=res[0].Nice/res[0].Total()
+		mapInstances["iowait"]=res[0].Iowait/res[0].Total()
+		mapInstances["irq"]=res[0].Irq/res[0].Total()
+		mapInstances["softirq"]=res[0].Softirq/res[0].Total()
+		mapInstances["steal"]=res[0].Steal/res[0].Total()
 		mapInstances["percent"]= percent[0]/100
 		mapInstances["load"]= getCpuLoad()
 	}
