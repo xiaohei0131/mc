@@ -19,7 +19,7 @@ type GPUInfo struct {
 }
 
 type Process struct {
-	PID           uint64 `json:"index"`
+	PID           uint64 `json:"pid"`
 	Name          string `json:"name"`
 	UsedGpuMemory uint64 `json:"used_gpu_memory"`
 }
