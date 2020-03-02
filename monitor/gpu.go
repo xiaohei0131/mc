@@ -7,16 +7,17 @@ import (
 )
 
 type GPUInfo struct {
-	Index          uint64    `json:"index"`
-	Name           string    `json:"name"`
-	DriverVersion  string    `json:"driver_version"`
-	MemoryTotal    uint64    `json:"memory_total"`
-	MemoryUsed     uint64    `json:"memory_used"`
-	MemoryFree     uint64    `json:"memory_free"`
-	MemoryUtil     float64   `json:"memory_utilization"`
-	GpuUtil        float64   `json:"gpu_utilization"`
-	GpuTemperature float64   `json:"gpu_temperature"`
-	Processes      []Process `json:"processes"`
+	Index             uint64    `json:"index"`
+	Name              string    `json:"name"`
+	DriverVersion     string    `json:"driver_version"`
+	MemoryTotal       uint64    `json:"memory_total"`
+	MemoryUsed        uint64    `json:"memory_used"`
+	MemoryUsedPercent float64   `json:"memory_used_percent"`
+	MemoryFree        uint64    `json:"memory_free"`
+	MemoryUtil        float64   `json:"memory_utilization"`
+	GpuUtil           float64   `json:"gpu_utilization"`
+	GpuTemperature    float64   `json:"gpu_temperature"`
+	Processes         []Process `json:"processes"`
 }
 
 type Process struct {
@@ -45,6 +46,7 @@ func GetGpuInfo(logger *log.Logger) []GPUInfo {
 		gpu.MemoryTotal = convertToUnit(arr[3])
 		gpu.MemoryUsed = convertToUnit(arr[4])
 		gpu.MemoryFree = convertToUnit(arr[5])
+		gpu.MemoryUsedPercent = convertToFloat(arr[4]) / convertToFloat(arr[3])
 		gpu.GpuUtil = convertToFloat(arr[6]) / 100
 		gpu.MemoryUtil = convertToFloat(arr[7]) / 100
 		gpu.GpuTemperature = convertToFloat(arr[8])

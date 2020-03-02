@@ -9,7 +9,7 @@ import (
 type Memory struct {
 	Memtotal        uint64  `json:"memory_total"`
 	Memused         uint64  `json:"memory_used"`
-	MemUsedPercent  float64 `json:"memory_utilization"`
+	MemUsedPercent  float64 `json:"memory_used_percent"`
 	MemAvailable    uint64  `json:"memory_available"`
 	MemFree         uint64  `json:"memory_free"`
 	SwapTotal       uint64  `json:"swap_total"`
