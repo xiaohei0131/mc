@@ -55,32 +55,40 @@ func start() {
 	wg := sync.WaitGroup{}
 
 	wg.Add(6)
+	var sysInfo ,ip  string
+	var memory,cpu,disk,gpu interface{}
 	go func() {
-		monitor["system"] = mo.GetSysInfo(logger)
-		wg.Done()
+		defer  wg.Done()
+		sysInfo = mo.GetSysInfo(logger)
 	}()
 	go func() {
-		monitor["ip"] = mo.GetLocalIP(logger)
-		wg.Done()
+		defer  wg.Done()
+		ip = mo.GetLocalIP(logger)
 	}()
 	go func() {
-		monitor["memory"] = mo.MemInfo(logger)
-		wg.Done()
+		defer  wg.Done()
+		memory = mo.MemInfo(logger)
 	}()
 	go func() {
-		monitor["cpu"] = mo.CpuInfo(logger)
-		wg.Done()
+		defer  wg.Done()
+		cpu = mo.CpuInfo(logger)
 	}()
 	go func() {
-		monitor["disk"] = mo.DiskMonitor(logger)
-		wg.Done()
+		defer  wg.Done()
+		disk = mo.DiskMonitor(logger)
 	}()
 	go func() {
-		monitor["gpu"] = mo.GetGpuInfo(logger)
-		wg.Done()
+		defer  wg.Done()
+		gpu = mo.GetGpuInfo(logger)
 	}()
 	wg.Wait()
 	//logger.Println("上报数据")
+	monitor["system"] = sysInfo
+	monitor["ip"] = ip
+	monitor["memory"] = memory
+	monitor["cpu"] = cpu
+	monitor["disk"] = disk
+	monitor["gpu"] = gpu
 	_, err := post(URL, monitor, CT)
 	if err != nil {
 		logger.Println("上报数据失败", err.Error())
