@@ -11,6 +11,8 @@ github.com/shirou/gopsutil v2.20.1+incompatible/go.mod h1:5b4v6he4MtMOwMlS0TUMTu
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.4.0 h1:2E4SXV/wtOkTonXsotYi4li6zVWxYlZuYNCXe9XRJyk=
 github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=
+github.com/xiaohei0131/plock v1.0.0 h1:M11QrR12Ob+bsmS4uLOt/teHQgpcgDuChegTDCZqjNc=
+github.com/xiaohei0131/plock v1.0.0/go.mod h1:UzdIlStifgx5s5MTzQjAtREt2UK1uauYgsvyY4q6yIw=
 golang.org/x/sys v0.0.0-20200217220822-9197077df867 h1:JoRuNIf+rpHl+VhScRQQvzbHed86tKkqwPMV34T8myw=
 golang.org/x/sys v0.0.0-20200217220822-9197077df867/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=

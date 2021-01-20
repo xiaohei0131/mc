@@ -13,6 +13,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"github.com/xiaohei0131/plock"
 )
 
 var Interval int
@@ -31,6 +32,8 @@ func init() {
 	logger.SetFlags(log.LstdFlags)
 }
 func main() {
+	plock.Lock()
+	defer plock.UnLock()
 	flag.IntVar(&Interval, "i", 5, "数据采集间隔(单位s)")
 	flag.StringVar(&URL, "server", "", "数据中心地址")
 	flag.Parse()
