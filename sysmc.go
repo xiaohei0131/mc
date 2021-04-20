@@ -5,15 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"flag"
+	"github.com/xiaohei0131/plock"
 	"io/ioutil"
-	"log"
+	"mc/common"
 	mo "mc/monitor"
 	"net/http"
-	"os"
 	"strings"
 	"sync"
 	"time"
-	"github.com/xiaohei0131/plock"
 )
 
 var Interval int
@@ -21,7 +20,7 @@ var URL string
 
 const CT string = "application/json"
 
-var logger *log.Logger
+/*var logger *log.Logger
 
 func init() {
 	file, err := os.OpenFile("mc.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
@@ -30,7 +29,7 @@ func init() {
 	}
 	logger = log.New(file, "", log.Llongfile)
 	logger.SetFlags(log.LstdFlags)
-}
+}*/
 func main() {
 	plock.Lock()
 	defer plock.UnLock()
@@ -38,12 +37,12 @@ func main() {
 	flag.StringVar(&URL, "server", "", "数据中心地址")
 	flag.Parse()
 	if len(URL) == 0 {
-		logger.Panicln("server参数为空")
+		common.MCLOG.Panicln("server参数为空")
 		//syscall.Exit(-1)
 	}
-	logger.Println("**********服务已启动**********")
-	logger.Println("数据中心地址", URL)
-	logger.Println("数据采集间隔时间", Interval, "秒")
+	common.MCLOG.Println("**********服务已启动**********")
+	common.MCLOG.Println("数据中心地址", URL)
+	common.MCLOG.Println("数据采集间隔时间", Interval, "秒")
 	ticker := time.NewTicker(time.Second * time.Duration(Interval))
 	for _ = range ticker.C {
 		start()
@@ -62,27 +61,27 @@ func start() {
 	var memory,cpu,disk,gpu interface{}
 	go func() {
 		defer  wg.Done()
-		sysInfo = mo.GetSysInfo(logger)
+		sysInfo = mo.GetSysInfo()
 	}()
 	go func() {
 		defer  wg.Done()
-		ip = mo.GetLocalIP(logger)
+		ip = mo.GetOutboundIP()
 	}()
 	go func() {
 		defer  wg.Done()
-		memory = mo.MemInfo(logger)
+		memory = mo.MemInfo()
 	}()
 	go func() {
 		defer  wg.Done()
-		cpu = mo.CpuInfo(logger)
+		cpu = mo.CpuInfo()
 	}()
 	go func() {
 		defer  wg.Done()
-		disk = mo.DiskMonitor(logger)
+		disk = mo.DiskMonitor()
 	}()
 	go func() {
 		defer  wg.Done()
-		gpu = mo.GetGpuInfo(logger)
+		gpu = mo.GetGpuInfo()
 	}()
 	wg.Wait()
 	//logger.Println("上报数据")
@@ -94,7 +93,7 @@ func start() {
 	monitor["gpu"] = gpu
 	_, err := post(URL, monitor, CT)
 	if err != nil {
-		logger.Println("上报数据失败", err.Error())
+		common.MCLOG.Println("上报数据失败", err.Error())
 	} /*else {
 		logger.Println("上报数据成功")
 	}*/

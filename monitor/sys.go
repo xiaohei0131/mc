@@ -1,15 +1,17 @@
 package monitor
 
-import "log"
+import (
+	"mc/common"
+)
 
-func GetSysInfo(logger *log.Logger) string {
+func GetSysInfo() string {
 	defer func() {
 		if err := recover(); err != nil {
-			logger.Println("操作系统数据采集失败", err)
+			common.MCLOG.Println("操作系统数据采集失败", err)
 		}
 	}()
 	cmdRe := runCmd("uname -a")
-	if len(cmdRe)>0{
+	if len(cmdRe) > 0 {
 		return cmdRe[0]
 	}
 	return ""

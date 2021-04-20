@@ -1,16 +1,16 @@
 package monitor
+
 import (
-	"fmt"
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/load"
-	"log"
+	"mc/common"
 	"time"
 )
 
-func CpuInfo(logger *log.Logger) interface{} {
+func CpuInfo() interface{} {
 	defer func() {
 		if err := recover(); err != nil {
-			logger.Println("CPU采集失败", err)
+			common.MCLOG.Println("CPU采集失败", err)
 		}
 	}()
 	mapInstances := map[string]interface{}{}
@@ -39,15 +39,15 @@ func CpuInfo(logger *log.Logger) interface{} {
 func getCpuInfo() {
 	cpuInfos, err := cpu.Info()
 	if err != nil {
-		fmt.Printf("get cpu info failed, err:%v", err)
+		common.MCLOG.Printf("get cpu info failed, err:%v", err)
 	}
 	for _, ci := range cpuInfos {
-		fmt.Println(ci)
+		common.MCLOG.Println(ci)
 	}
 	// CPU使用率
 	for {
 		percent, _ := cpu.Percent(time.Second, false)
-		fmt.Printf("cpu percent:%v\n", percent)
+		common.MCLOG.Printf("cpu percent:%v\n", percent)
 	}
 }
 

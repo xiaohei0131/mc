@@ -2,7 +2,7 @@ package monitor
 
 import (
 	"fmt"
-	"log"
+	"mc/common"
 	"strings"
 )
 
@@ -26,10 +26,10 @@ type Process struct {
 	UsedGpuMemory uint64 `json:"used_gpu_memory"`
 }
 
-func GetGpuInfo(logger *log.Logger) []GPUInfo {
+func GetGpuInfo() []GPUInfo {
 	defer func() {
 		if err := recover(); err != nil {
-			logger.Println("GPU采集失败", err)
+			common.MCLOG.Println("GPU采集失败", err)
 		}
 	}()
 	cmdRe := runCmd("nvidia-smi --query-gpu=index,name,driver_version,memory.total,memory.used,memory.free,utilization.gpu,utilization.memory,temperature.gpu --format=csv,noheader,nounits")

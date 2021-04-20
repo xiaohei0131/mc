@@ -1,14 +1,17 @@
 package monitor
 
 import (
-	"log"
+	"mc/common"
 	"net"
 )
 
-func GetLocalIP(logger *log.Logger) string {
+/**
+此方法遇到多个IP接口时会出现不确定性
+ */
+func GetLocalIP() string {
 	defer func() {
 		if err := recover(); err != nil {
-			logger.Println("IP采集失败", err)
+			common.MCLOG.Println("IP采集失败", err)
 		}
 	}()
 	addrs, err := net.InterfaceAddrs()
@@ -29,4 +32,16 @@ func GetLocalIP(logger *log.Logger) string {
 		return ipAddr.IP.String()
 	}
 	return "unknown"
+}
+
+func GetOutboundIP() string {
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if err != nil {
+		common.MCLOG.Println("IP采集失败", err)
+	}
+	defer conn.Close()
+
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+
+	return localAddr.IP.String()
 }

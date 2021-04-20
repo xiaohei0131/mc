@@ -1,7 +1,7 @@
 package monitor
 
 import (
-	"log"
+	"mc/common"
 	"strings"
 )
 
@@ -27,10 +27,10 @@ import (
 /**
 监控磁盘
 */
-func DiskMonitor(logger *log.Logger) interface{} {
+func DiskMonitor() interface{} {
 	defer func() {
 		if err := recover(); err != nil {
-			logger.Println("磁盘（disk）采集失败", err)
+			common.MCLOG.Println("磁盘（disk）采集失败", err)
 		}
 	}()
 	//cmdRe := runCmd("df -hT")

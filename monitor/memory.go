@@ -2,7 +2,7 @@ package monitor
 
 import (
 	"github.com/shirou/gopsutil/mem"
-	"log"
+	"mc/common"
 	"strings"
 )
 
@@ -20,10 +20,10 @@ type Memory struct {
 	SwapOut         uint64  `json:"swap_out"`
 }
 
-func MemInfo(logger *log.Logger) interface{} {
+func MemInfo() interface{} {
 	defer func() {
 		if err := recover(); err != nil {
-			logger.Println("内存采集失败", err)
+			common.MCLOG.Println("内存采集失败", err)
 		}
 	}()
 	v, _ := mem.VirtualMemory()
